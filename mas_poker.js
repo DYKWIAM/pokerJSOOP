@@ -233,4 +233,5 @@ checkFileExistsIfNotCreateOn();
 menu();
 console.log('#'.repeat(40));
 playPoker();
-console.log(table)
+
+console.log(" Cards on the table "+table)

@@ -46,14 +46,20 @@ function startNewGame() {
 }
 
 function loadPlayer() {
-
+  //first read the file
   let fileContent = fs.readFileSync(filePath, 'utf8');
+  //search for money in everyline
   let moneyLine = fileContent.match(/"money": (\d+)/);
+  //change from string to number
   let amountOfMoney = moneyLine ? parseInt(moneyLine[1]) : null;
 
+  //move the content of the txt file to array split by \n 
   let arr = fileContent.split('\n');
   let count = 1;
   let runWhileLoop = 0;
+
+  //runt a while loop and match the user input with the array above see if name is found.
+  //then set the class player. name and money from the file.
   while(runWhileLoop==0){
     let searchTerm = prompt('Type in Player name to Load: ');
     let regex = new RegExp(`\\b${searchTerm}\\b`);
@@ -100,7 +106,7 @@ function shuffleDeck(deck) {// Shuffle the deck
   }
 
   
-function dealCards(deck, players, cardsPerPlayer) {// Deal cards to players
+function dealCards(deck, players, cardsPerPlayer) {// Deal cards to players and on the table(but keep the table hidden to start with)
     let hands = {};
     for (let player of players) {
       hands[player] = [];
@@ -111,13 +117,13 @@ function dealCards(deck, players, cardsPerPlayer) {// Deal cards to players
     table.push(deck.pop());// the first 
     table.push(deck.pop());// the      second
     table.push(deck.pop());// the             third cards that are shown in first round of poker
-    table.push(deck.pop());// the 4th card 
-    table.push(deck.pop());// the 5th card
+    table.push(deck.pop());// the 4th card    single card shown in second round
+    table.push(deck.pop());// the 5th card    single card shown in third round
     return hands;
   }
 
 
-
+//poker logic for every set and which hand wins.
   const HAND_CARD_RANK = [
     'High Card',
     'One Pair',
@@ -130,7 +136,6 @@ function dealCards(deck, players, cardsPerPlayer) {// Deal cards to players
     'Straight Flush',
     'Royal Flush'
   ];
-
 
   //----------this below is our data we use to determind the strategy or function to show who or what hand wins.
   //hand of 'Player 1': [ { suit: 'Spades', rank: 'Q' }, { suit: 'Spades', rank: '3' } ],        
@@ -157,12 +162,9 @@ function dealCards(deck, players, cardsPerPlayer) {// Deal cards to players
 
 
 
-
+//we show the player the cards he/she has and let them bet
+//the house will bet the same and total bet is shown with the hands.
 function whoWins(hands){
-    //Test print player 1 hand
-/*     console.log(hands["Player 1"][0].rank)
-        console.log(hands["Player 1"][0].suit)
- */
     console.log(COLORS.CYAN + COLORS.BOLD +`${player1.name}\'s hand: ${hands["Player 1"][0].rank} of ${hands["Player 1"][0].suit}, ${hands["Player 1"][1].rank} of ${hands["Player 1"][1].suit}${COLORS.RESET}`)
     console.log("Player 2\'s hand is hidden.\n");
     
@@ -186,7 +188,7 @@ function whoWins(hands){
     writeObjectToFile(filePath, player1);
 }
 
-  // Example game
+  // sets the game up
 function playPoker() {
     let deck = createDeck();
     shuffleDeck(deck);
@@ -200,6 +202,8 @@ function playPoker() {
   }
  //read the file to array for later checking against name/money
 
+
+ //simple menu with 2 options  first: start register new game or 2 Load game from file.
 function menu() {
     let logo =`  
     ____       _             
